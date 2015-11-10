@@ -1,3 +1,5 @@
+import collections
+
 class Node:
 
     def __init__(self, left = None, right = None, data = None):
@@ -27,10 +29,10 @@ def DFS(root, onNode=None, willExitNode=None):
 
 
 def BFS(root, onNode=None):
-    todo = []
+    todo = collections.deque()
     todo.append(root)
     while todo:
-        node = todo.pop(0)
+        node = todo.popleft()
         if onNode is not None:
             onNode(node)
         if node.left is not None:
