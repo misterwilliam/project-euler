@@ -1,5 +1,6 @@
 import itertools
 import functools
+import math
 import unittest
 
 
@@ -24,7 +25,7 @@ def GetTriangleNumber(n):
 @memoize
 def Factor(n):
     factors = set([1, n])
-    for i in xrange(2, n):
+    for i in xrange(2, int(math.pow(n, 0.5)) + 1):
         if n % i == 0:
             recursiveFactors = Factor(n / i)
             return factors | set([i, n]) | recursiveFactors | \
@@ -41,7 +42,7 @@ def GetFirstWithNumDivisors(n):
         i += 1
 
 
-print GetFirstWithNumDivisors(500)
+# print GetFirstWithNumDivisors(500)
 
 
 class GetTriangleNumberTests(unittest.TestCase):
@@ -67,6 +68,9 @@ class GetFirstWithNumDivisorsTests(unittest.TestCase):
 
     def test_Five(self):
         self.assertEqual(GetFirstWithNumDivisors(5), 28)
+
+    def test_Answer(self):
+        self.assertEqual(GetFirstWithNumDivisors(500), 76576500)
 
 
 if __name__ == '__main__':
