@@ -14,3 +14,26 @@ class Node:
         else:
             return "(%s: %s %s)" % (self.data, self.left, self.right)
 
+
+def DFS(root, onNode=None, willExitNode=None):
+    if onNode is not None:
+        onNode(root)
+    if root.left is not None:
+        DFS(root.left, onNode, willExitNode)
+    if root.right is not None:
+        DFS(root.right, onNode, willExitNode)
+    if willExitNode is not None:
+        willExitNode(root)
+
+
+def BFS(root, onNode=None):
+    todo = []
+    todo.append(root)
+    while todo:
+        node = todo.pop(0)
+        if onNode is not None:
+            onNode(node)
+        if node.left is not None:
+            todo.append(node.left)
+        if node.right is not None:
+            todo.append(node.right)

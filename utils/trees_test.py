@@ -2,8 +2,6 @@ import unittest
 
 import trees
 
-root = trees.Node()
-
 
 class NodeTests(unittest.TestCase):
 
@@ -24,6 +22,58 @@ class NodeTests(unittest.TestCase):
         e = trees.Node(data="e")
         d = trees.Node(left=c, right=e, data="d")
         self.assertEqual(str(d), "(d: (c: a b) e)")
+
+
+class DFSTests(unittest.TestCase):
+
+    def test_onNodeTraversalOrder(self):
+        d = trees.Node(data="d",
+                       right=trees.Node(data="e"),
+                       left=trees.Node(data="c",
+                                       right=trees.Node(data="b"),
+                                       left=trees.Node(data="a")))
+
+        path = []
+        def recordPath(node):
+            path.append(node.data)
+
+        trees.DFS(d, onNode=recordPath)
+
+        self.assertEqual(path, ["d", "c", "a", "b", "e"])
+
+    def test_willExitNodeTraversalOrder(self):
+        d = trees.Node(data="d",
+                       right=trees.Node(data="e"),
+                       left=trees.Node(data="c",
+                                       right=trees.Node(data="b"),
+                                       left=trees.Node(data="a")))
+
+        path = []
+        def recordPath(node):
+            path.append(node.data)
+
+        trees.DFS(d, willExitNode=recordPath)
+
+        self.assertEqual(path, ["a", "b", "c", "e", "d"])
+
+
+class BFSTests(unittest.TestCase):
+
+    def test_onNodeTraversalOrder(self):
+        d = trees.Node(data="d",
+                       right=trees.Node(data="e"),
+                       left=trees.Node(data="c",
+                                       right=trees.Node(data="b"),
+                                       left=trees.Node(data="a")))
+
+        path = []
+        def recordPath(node):
+            path.append(node.data)
+
+        trees.BFS(d, onNode=recordPath)
+
+        self.assertEqual(path, ["d", "c", "e", "a", "b"])
+
 
 if __name__ == '__main__':
     unittest.main()
