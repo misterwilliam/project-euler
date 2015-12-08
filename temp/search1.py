@@ -22,7 +22,7 @@ def BFS(root, onNode):
     todo = collections.deque([root])
     seen = set([root])
     while todo:
-        current = todo.pop(0)
+        current = todo.popleft()
         onNode(current)
         for child in current.children:
             if child not in seen:
