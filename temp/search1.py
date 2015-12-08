@@ -1,4 +1,5 @@
 # 12/7 10:36 - 10:49
+import collections
 import unittest
 
 class Node(object):
@@ -18,11 +19,10 @@ def DFS(root, onNode):
             DFS(child, onNode)
 
 def BFS(root, onNode):
-    todo = [root]
-    seen = set()
-    seen.add(root)
+    todo = collections.deque([root])
+    seen = set([root])
     while todo:
-        current = todo.pop(0)   # slow
+        current = todo.pop(0)
         onNode(current)
         for child in current.children:
             if child not in seen:
