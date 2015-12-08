@@ -30,6 +30,12 @@ def BFS(root, onNode):
 
 class MyTests(unittest.TestCase):
 
+    def setUp(self):
+        self.log = []
+
+    def LogVisits(self, node):
+        self.log.append(node.data)
+
     def test_SimpleDFS(self):
         root = Node("a", children=[
                     Node("b", children=[
@@ -38,11 +44,9 @@ class MyTests(unittest.TestCase):
                     ]),
                     Node("e")
                ])
-        log = []
-        def LogVisits(node):
-            log.append(node.data)
-        DFS(root, LogVisits)
-        self.assertEqual(log, ["a", "b", "c", "d", "e"])
+
+        DFS(root, self.LogVisits)
+        self.assertEqual(self.log, ["a", "b", "c", "d", "e"])
 
     def test_SimpleBFS(self):
         root = Node("a", children=[
@@ -52,11 +56,9 @@ class MyTests(unittest.TestCase):
                     ]),
                     Node("e")
                ])
-        log = []
-        def LogVisits(node):
-            log.append(node.data)
-        BFS(root, LogVisits)
-        self.assertEqual(log, ["a", "b", "e", "c", "d"])
+
+        BFS(root, self.LogVisits)
+        self.assertEqual(self.log, ["a", "b", "e", "c", "d"])
 
 
 if __name__ == "__main__":
