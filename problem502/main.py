@@ -2,6 +2,7 @@ import itertools
 import unittest
 
 from block import Block
+from grid_utils import pretty_print
 
 def find_index_of_first(sequence, predicate):
   for i, element in enumerate(sequence):
@@ -33,14 +34,6 @@ class Grid(object):
     self.height = height
     self.rows = [[] for _ in xrange(self.height)]
     self.num_blocks = 0
-
-  def pretty_print(self):
-    grid_repr = []
-    grid_repr.append(self.pp_horizontal_line(self.width))
-    for row_index in xrange(self.height - 1, -1, -1):
-      grid_repr.append(self.pp_row(self.rows[row_index]))
-      grid_repr.append(self.pp_horizontal_line(self.width))
-    print("\n".join(grid_repr))
 
   def maybe_add_block(self, new_block, row_index):
     row = self.rows[row_index]
@@ -115,27 +108,11 @@ class Grid(object):
     else:
       return True
 
-  def pp_horizontal_line(self, width):
-    plusses = ["+" for _ in xrange(width + 1)]
-    return "-".join(plusses)
-
-  def pp_row(self, row):
-    starts = []
-    ends = []
-    for block in row:
-      starts.append(block.start)
-      ends.append(block.start + block.length)
-    row_repr = [" " for _ in xrange(2 * self.width + 1)]
-    for start in starts:
-      row_repr[2*start] = "|"
-    for end in ends:
-      row_repr[2*end] = "|"
-    return "".join(row_repr)
-
 # ANSWER -----------------------
 
 grid = Grid(4, 3)
 assert grid.maybe_add_block(Block(0, 3), 0)
+pretty_print(grid)
 
 
 # TESTS ------------------------
@@ -172,7 +149,6 @@ class MyTests(unittest.TestCase):
     self.assertEqual(True, grid.maybe_add_block(Block(3, 1), 0))
     self.assertEqual(True, grid.maybe_add_block(Block(0, 1), 1))
     self.assertEqual(True, grid.maybe_add_block(Block(3, 1), 1))
-    grid.pretty_print()
     self.assertTrue(grid.is_castle())
 
 
