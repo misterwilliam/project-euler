@@ -43,3 +43,28 @@ class GridTests(unittest.TestCase):
     self.assertEqual(True, grid.maybe_add_block(blocks.Block(3, 1), 1))
     self.assertEqual(True, grid.maybe_add_block(blocks.Block(0, 1), 2))
     self.assertEqual(True, grid.is_castle())
+
+  def test_eq(self):
+    grid_a = Grid(4, 3)
+    grid_b = Grid(4, 3)
+
+    assert grid_a.maybe_add_block(blocks.Block(0, 4), 0)
+    assert grid_b.maybe_add_block(blocks.Block(0, 4), 0)
+
+    assert grid_a.maybe_add_block(blocks.Block(0, 1), 1)
+    assert grid_b.maybe_add_block(blocks.Block(0, 1), 1)
+
+    self.assertEqual(grid_a, grid_b)
+
+  def test_hash(self):
+    grid_a = Grid(4, 3)
+    grid_b = Grid(4, 3)
+
+    assert grid_a.maybe_add_block(blocks.Block(0, 4), 0)
+    assert grid_b.maybe_add_block(blocks.Block(0, 4), 0)
+
+    assert grid_a.maybe_add_block(blocks.Block(0, 1), 1)
+    assert grid_b.maybe_add_block(blocks.Block(0, 1), 1)
+
+    self.assertEqual(hash(grid_a), hash(grid_b))
+

@@ -16,7 +16,7 @@ class Grid(object):
   1. Enforced during maybe_add_block().
   2. Adding block to grid naturally enforces this.
   3. Enforced during maybe_add_block().
-  4.
+  4. Enforced by is_castle().
   5. Enforced by is_castle().
   6. Enforced by is_castle().
   """
@@ -26,6 +26,15 @@ class Grid(object):
     self.height = height
     self.rows = [[] for _ in xrange(self.height)]
     self.num_blocks = 0
+
+  def __eq__(self, other):
+    return self.width == other.width and \
+      self.height == other.height and \
+      self.rows == other.rows
+
+  def __hash__(self):
+    return hash((self.width, self.height,
+                tuple(tuple(row) for row in self.rows)))
 
   def maybe_add_block(self, new_block, row_index):
     row = self.rows[row_index]
