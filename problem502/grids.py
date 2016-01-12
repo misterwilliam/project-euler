@@ -52,18 +52,11 @@ class Grid(object):
   def is_completely_supported(self, block, row_index):
     if row_index >= 1:
       supporting_row = self.rows[row_index - 1]
-      supports = self.get_filled_cols(supporting_row)
+      supports = get_filled_cols(supporting_row)
       for col in block.range():
         if col not in supports:
           return False
     return True
-
-  def get_filled_cols(self, row):
-    filled_cols = set()
-    for block in row:
-      for col in block.range():
-        filled_cols.add(col)
-    return filled_cols
 
   def is_block_within_grid(self, block):
     if block.start < 0:
@@ -88,14 +81,35 @@ class Grid(object):
         return True
     return False
 
+  def is_bottom_filled_with_single_block(self):
+    bottom_row = self.rows[0]
+    if len(bottom_row) != 1:
+      return False
+    single_block = bottom_row[0]
+    if single_block.length != self.width:
+      return False
+    return True
+
   def is_castle(self):
     if self.num_blocks % 2 == 1:
-      return False
+      return False, "Not even number blocks"
     elif len(self.rows[self.height - 1]) == 0:
       # Castles must have blocks in top row
-      return False
+      return False, "Too short"
+    elif not self.is_bottom_filled_with_single_block():
+      return False, "Not single complete foundation"
     else:
       return True
+
+# Row utils -------------------------------------------------------
+def get_filled_cols(row):
+  filled_cols = set()
+  for block in row:
+    for col in block.range():
+      filled_cols.add(col)
+  return filled_cols
+
+# Pretty printing -------------------------------------------------
 
 def pretty_print(grid):
   grid_repr = []
