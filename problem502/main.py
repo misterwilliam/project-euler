@@ -7,6 +7,13 @@ class Block(object):
     self.start = start
     self.length = length
 
+  def __str__(self):
+    return "Block { start: %i length: %i }" % (self.start, self.length)
+
+  def range(self):
+    for i in xrange(self.start, self.start + self.length + 1):
+      yield i
+
 def find_index_of_first(sequence, predicate):
   for i, element in enumerate(sequence):
     if predicate(element):
@@ -22,6 +29,14 @@ class Grid(object):
   4. The bottom row is occupied by a block of length w.
   5. The maximum achieved height of the entire castle is exactly h.
   6. The castle is made from an even number of blocks.
+
+  Enforcement:
+  1. Enforced during maybe_add_block().
+  2. Adding block to grid naturally enforces this.
+  3. Enforced during maybe_add_block().
+  4.
+  5. Enforced by is_castle().
+  6. Enforced by is_castle().
   """
 
   def __init__(self, width, height):
@@ -40,9 +55,9 @@ class Grid(object):
 
   def maybe_add_block(self, new_block, row_index):
     row = self.rows[row_index]
-    return self._maybe_add_block_to_row(row, new_block)
+    return self._maybe_add_block_to_row(row_index, row, new_block)
 
-  def _maybe_add_block_to_row(self, row, new_block):
+  def _maybe_add_block_to_row(self, row_index, row, new_block):
     insertion_point = len([block for block in
       itertools.takewhile(
         lambda block: block.start < new_block.start,
@@ -53,10 +68,28 @@ class Grid(object):
       return False, "Too close left"
     if self.is_too_close_on_right(new_block, insertion_point, row):
       return False, "Too close right"
+    if not self.is_completely_supported(new_block, row_index):
+      return False, "Not completely supported"
 
     row.insert(insertion_point, new_block)
     self.num_blocks += 1
     return True
+
+  def is_completely_supported(self, block, row_index):
+    if row_index >= 1:
+      supporting_row = self.rows[row_index - 1]
+      supports = self.get_filled_cols(supporting_row)
+      for col in block.range():
+        if col not in supports:
+          return False
+    return True
+
+  def get_filled_cols(self, row):
+    filled_cols = set()
+    for block in row:
+      for col in block.range():
+        filled_cols.add(col)
+    return filled_cols
 
   def is_block_within_grid(self, block):
     if block.start < 0:
@@ -138,6 +171,11 @@ class MyTests(unittest.TestCase):
     self.assertEqual(True, grid.maybe_add_block(Block(0, 1), 0))
     self.assertEqual((False, "Too close left"),
                      grid.maybe_add_block(Block(1, 1), 0))
+
+  def test_not_overlapping(self):
+    grid = Grid(4, 2)
+    self.assertEqual((False, "Not completely supported"),
+                     grid.maybe_add_block(Block(3, 1), 1))
 
   def test_make_a_castle(self):
     grid = Grid(4, 2)
