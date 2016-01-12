@@ -1,7 +1,7 @@
 import itertools
 import unittest
 
-from block import Block
+import blocks
 from grid_utils import pretty_print
 
 def find_index_of_first(sequence, predicate):
@@ -80,14 +80,11 @@ class Grid(object):
       return False
     return True
 
-  def get_block_separation(self, block_a, block_b):
-    return block_b.start - (block_a.start + block_a.length)
-
   def is_too_close_on_left(self, block, insertion_point, row):
     # If there is a block on left
     if insertion_point != 0:
       # Make sure at least 1 away from it
-      if self.get_block_separation(row[insertion_point - 1], block) < 1:
+      if blocks.separation(row[insertion_point - 1], block) < 1:
         return True
     return False
 
@@ -95,7 +92,7 @@ class Grid(object):
     # If there is a block on right
     if insertion_point < len(row) - 1:
       # Make sure at least 1 away from it
-      if self.get_block_separation(block, row[insertion_point]) < 1:
+      if blocks.separation(block, row[insertion_point]) < 1:
         return True
     return False
 
@@ -111,7 +108,7 @@ class Grid(object):
 # ANSWER -----------------------
 
 grid = Grid(4, 3)
-assert grid.maybe_add_block(Block(0, 3), 0)
+assert grid.maybe_add_block(blocks.Block(0, 3), 0)
 pretty_print(grid)
 
 
@@ -121,34 +118,34 @@ class MyTests(unittest.TestCase):
 
   def test_missing_block_in_top_row(self):
     grid = Grid(4, 2)
-    self.assertEqual(True, grid.maybe_add_block(Block(0, 1), 0))
-    self.assertEqual(True, grid.maybe_add_block(Block(3, 1), 0))
+    self.assertEqual(True, grid.maybe_add_block(blocks.Block(0, 1), 0))
+    self.assertEqual(True, grid.maybe_add_block(blocks.Block(3, 1), 0))
     self.assertFalse(grid.is_castle())
 
   def test_missing_odd_blocks(self):
     grid = Grid(4, 2)
-    self.assertEqual(True, grid.maybe_add_block(Block(0, 1), 0))
-    self.assertEqual(True, grid.maybe_add_block(Block(3, 1), 0))
-    self.assertEqual(True, grid.maybe_add_block(Block(3, 1), 1))
+    self.assertEqual(True, grid.maybe_add_block(blocks.Block(0, 1), 0))
+    self.assertEqual(True, grid.maybe_add_block(blocks.Block(3, 1), 0))
+    self.assertEqual(True, grid.maybe_add_block(blocks.Block(3, 1), 1))
     self.assertFalse(grid.is_castle())
 
   def test_not_1_block_away(self):
     grid = Grid(4, 2)
-    self.assertEqual(True, grid.maybe_add_block(Block(0, 1), 0))
+    self.assertEqual(True, grid.maybe_add_block(blocks.Block(0, 1), 0))
     self.assertEqual((False, "Too close left"),
-                     grid.maybe_add_block(Block(1, 1), 0))
+                     grid.maybe_add_block(blocks.Block(1, 1), 0))
 
   def test_not_overlapping(self):
     grid = Grid(4, 2)
     self.assertEqual((False, "Not completely supported"),
-                     grid.maybe_add_block(Block(3, 1), 1))
+                     grid.maybe_add_block(blocks.Block(3, 1), 1))
 
   def test_make_a_castle(self):
     grid = Grid(4, 2)
-    self.assertEqual(True, grid.maybe_add_block(Block(0, 1), 0))
-    self.assertEqual(True, grid.maybe_add_block(Block(3, 1), 0))
-    self.assertEqual(True, grid.maybe_add_block(Block(0, 1), 1))
-    self.assertEqual(True, grid.maybe_add_block(Block(3, 1), 1))
+    self.assertEqual(True, grid.maybe_add_block(blocks.Block(0, 1), 0))
+    self.assertEqual(True, grid.maybe_add_block(blocks.Block(3, 1), 0))
+    self.assertEqual(True, grid.maybe_add_block(blocks.Block(0, 1), 1))
+    self.assertEqual(True, grid.maybe_add_block(blocks.Block(3, 1), 1))
     self.assertTrue(grid.is_castle())
 
 
