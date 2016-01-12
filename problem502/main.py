@@ -16,6 +16,22 @@ def randomly_fill_row(grid, row_index, col_start):
       else:
         yield grid_clone
 
+def build_castles(width, height):
+  grid = grids.Grid(width, height)
+  grid.maybe_add_block(blocks.Block(0, width), 0)
+  candidates = set([grid])
+  for row_index in xrange(1, height):
+    new_candidates = set()
+    for grid in candidates:
+      for filled_grid in randomly_fill_row(grid, row_index, 0):
+        new_candidates.add(filled_grid)
+    candidates = new_candidates
+  castles = set()
+  for candidate in candidates:
+    if candidate.is_castle() is True:
+      castles.add(candidate)
+  return castles
+
 
 grid = grids.Grid(4, 3)
 assert grid.maybe_add_block(blocks.Block(0, 3), 0)

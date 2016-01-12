@@ -41,6 +41,7 @@ class Grid(object):
     clone.rows = [
       [block for block in row] for row in self.rows
     ]
+    clone.num_blocks = self.num_blocks
     return clone
 
   def maybe_add_block(self, new_block, row_index):

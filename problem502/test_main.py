@@ -5,7 +5,7 @@ import grids
 
 from main import *
 
-class MyTests(unittest.TestCase):
+class RandomlyFillRowTests(unittest.TestCase):
 
   def test_randomly_fill_row_width_4(self):
     grid = grids.Grid(4, 2)
@@ -34,3 +34,21 @@ class MyTests(unittest.TestCase):
       grid for grid in randomly_fill_row(grid, 0, 0)
     ]
     self.assertEqual(7, len(randomly_filled_grids))
+
+class BuildCastlesTest(unittest.TestCase):
+
+  def test_4_1(self):
+    castles = build_castles(4, 1)
+    self.assertEqual(0, len(castles))
+
+  def test_1_2(self):
+    castles = build_castles(1, 2)
+    self.assertEqual(1, len(castles))
+
+  def test_2_2(self):
+    castles = build_castles(2, 2)
+    self.assertEqual(3, len(castles))
+
+  def test_4_2(self):
+    castles = build_castles(4, 2)
+    self.assertEqual(10, len(castles))
