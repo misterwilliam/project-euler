@@ -4,12 +4,6 @@ import unittest
 import blocks
 from grid_utils import pretty_print
 
-def find_index_of_first(sequence, predicate):
-  for i, element in enumerate(sequence):
-    if predicate(element):
-      return i
-  return None
-
 class Grid(object):
   """
   Rules for a valid castle:
