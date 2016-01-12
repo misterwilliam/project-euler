@@ -36,6 +36,13 @@ class Grid(object):
     return hash((self.width, self.height,
                 tuple(tuple(row) for row in self.rows)))
 
+  def clone(self):
+    clone = Grid(self.width, self.height)
+    clone.rows = [
+      [block for block in row] for row in self.rows
+    ]
+    return clone
+
   def maybe_add_block(self, new_block, row_index):
     row = self.rows[row_index]
     return self._maybe_add_block_to_row(row_index, row, new_block)

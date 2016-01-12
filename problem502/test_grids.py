@@ -68,3 +68,19 @@ class GridTests(unittest.TestCase):
 
     self.assertEqual(hash(grid_a), hash(grid_b))
 
+  def test_clone(self):
+    grid = Grid(4, 3)
+    assert grid.maybe_add_block(blocks.Block(0, 1), 0)
+    grid_clone = grid.clone()
+    self.assertEqual(grid, grid_clone)
+    self.assertFalse(grid is grid_clone)
+    # Deep copy of rows
+    self.assertFalse(grid.rows is grid_clone.rows)
+    # Deep copy of each row
+    self.assertFalse(grid.rows[0] is grid_clone.rows[0])
+    # But share blocks
+    self.assertTrue(grid.rows[0][0] is grid_clone.rows[0][0])
+
+    assert grid_clone.maybe_add_block(blocks.Block(2, 1), 0)
+    self.assertNotEqual(grid, grid_clone)
+
